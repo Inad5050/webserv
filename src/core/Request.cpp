@@ -1,6 +1,7 @@
 #include "../../include/core/Request.hpp"
 #include <sstream>
 #include <iostream>
+#include "../../include/utils/Debug.hpp"
 
 Request::Request(): _cfg(NULL), _serverIndex(-1), _redirection(false)
 {}
@@ -38,9 +39,7 @@ Request::~Request()
 
 bool Request::parse(const std::string& raw)
 {
-    #ifndef NDEBUG
-        std::cout << "\n[DEBUG]-------------------[REQUEST] START-------------------" << std::endl;
-	#endif
+    debug << "\n[DEBUG]-------------------[REQUEST] START-------------------" << std::endl;
     
 	std::istringstream stream(raw);
     std::string line;
@@ -62,21 +61,16 @@ bool Request::parse(const std::string& raw)
         _path        = _uri;
         _queryString.clear();
     }
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][Request] Start line parsed: " << _method << " " << _uri << " " << _version << "\n";
-
-    std::cout << "[DEBUG][Request] Path: " << _path << std::endl;
-    std::cout << "[DEBUG][Request] Query String: " << _queryString << std::endl;
-    #endif
+    debug << "[DEBUG][Request] Start line parsed: " << _method << " " << _uri << " " << _version << "\n";
+    debug << "[DEBUG][Request] Path: " << _path << std::endl;
+    debug << "[DEBUG][Request] Query String: " << _queryString << std::endl;
     while (std::getline(stream, line) && line != "\r" && line != "\n") {
         size_t pos = line.find(':');
         if (pos == std::string::npos) continue;
 
         std::string key   = line.substr(0, pos);
         std::string value = line.substr(pos + 1);
-        #ifndef NDEBUG
-        std::cout << "[DEBUG][Request] Header found: " << key << " = " << value << "\n";
-        #endif
+        debug << "[DEBUG][Request] Header found: " << key << " = " << value << "\n";
         for (size_t i = 0; i < key.size(); ++i) {
             key[i] = std::tolower(key[i]);
         }
@@ -101,19 +95,14 @@ bool Request::parse(const std::string& raw)
         _keepAlive = (getHeader("Connection") == "keep-alive");
     }
    
-	#ifndef NDEBUG
 	if (_method != "POST")
-		std::cout << "[Request] Body: " << _body << std::endl;
-
-	std::cout << "[Request] POST method body may be to big to print" << std::endl;
-	std::cout << "[Request] Keep-Alive: " << (_keepAlive ? "true" : "false") << std::endl;
-	std::cout << "[Request] Path: " << _path << "\n"
+		debug << "[Request] Body: " << _body << std::endl;
+	debug << "[Request] POST method body may be to big to print" << std::endl;
+	debug << "[Request] Keep-Alive: " << (_keepAlive ? "true" : "false") << std::endl;
+	debug << "[Request] Path: " << _path << "\n"
 		<< "[Request] Query String: " << _queryString << std::endl;
-	std::cout << "[DEBUG][Request] Request parsing completed successfully." << std::endl;
-		
-	std::cout << "[DEBUG]-------------------[REQUEST] END-------------------\n" << std::endl;
-
-    #endif
+	debug << "[DEBUG][Request] Request parsing completed successfully." << std::endl;
+	debug << "[DEBUG]-------------------[REQUEST] END-------------------\n" << std::endl;
     return (true);
 }
 

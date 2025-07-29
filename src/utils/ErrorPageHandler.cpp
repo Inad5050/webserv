@@ -3,6 +3,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include "iostream"
+#include "../../include/utils/Debug.hpp"
 
 const ErrorPageHandler::ErrorPageEntry ErrorPageHandler::errorPages[] = {
 	{400, "/error_pages/400.html"},
@@ -15,9 +16,7 @@ const ErrorPageHandler::ErrorPageEntry ErrorPageHandler::errorPages[] = {
 };
 
 ErrorPageHandler::ErrorPageHandler(const std::string& rootPath) : _rootPath(rootPath) {
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][ErrorPageHandler] initialized with root path: " << _rootPath << std::endl;
-    #endif
+    debug << "[DEBUG][ErrorPageHandler] initialized with root path: " << _rootPath << std::endl;
 }
 
 ErrorPageHandler::ErrorPageHandler(const ErrorPageHandler& other) : _rootPath(other._rootPath) {}
@@ -56,9 +55,7 @@ std::string ErrorPageHandler::readFile(const std::string& path){
 
 std::string ErrorPageHandler::render(const Request &request, int code, const std::string& fallbackText) const 
 {
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][ErrorPageHandler][Render] Rendering error page for code: " << code << std::endl;
-    #endif
+    debug << "[DEBUG][ErrorPageHandler][Render] Rendering error page for code: " << code << std::endl;
 
     std::string relPathStr;
     try 
@@ -87,28 +84,18 @@ std::string ErrorPageHandler::render(const Request &request, int code, const std
         relPathStr.clear();
     }
 
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][ErrorPageHandler][Render] Relative path (trimmed): " << relPathStr << std::endl;
-    #endif
+    debug << "[DEBUG][ErrorPageHandler][Render] Relative path (trimmed): " << relPathStr << std::endl;
     std::string fullPath = _rootPath + relPathStr;
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][ErrorPageHandler][Render] Page_Handler: " << fullPath << std::endl;
-    #endif
+    debug << "[DEBUG][ErrorPageHandler][Render] Page_Handler: " << fullPath << std::endl;
 
     if (!relPathStr.empty()) 
 	{
-        #ifndef NDEBUG
-        std::cout << "[DEBUG][ErrorPageHandler][Render] Checking if file exists: " << fullPath << std::endl;
-        #endif
+        debug << "[DEBUG][ErrorPageHandler][Render] Checking if file exists: " << fullPath << std::endl;
         if (fileExists(fullPath)) 
 		{
-            #ifndef NDEBUG
-            std::cout << "[DEBUG][ErrorPageHandler][Render] File exists: " << fullPath << std::endl;
-            #endif
+            debug << "[DEBUG][ErrorPageHandler][Render] File exists: " << fullPath << std::endl;
             std::string content = readFile(fullPath);
-            #ifndef NDEBUG
-            std::cout << "[DEBUG][ErrorPageHandler][Render] File content length: " << content.length() << std::endl;
-            #endif
+            debug << "[DEBUG][ErrorPageHandler][Render] File content length: " << content.length() << std::endl;
             if (!content.empty())
                 return content;
         }

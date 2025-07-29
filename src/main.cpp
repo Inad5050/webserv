@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*                                webserv main                                */
+/* webserv main                                */
 /* ************************************************************************** */
 
 #include <iostream>
@@ -16,15 +16,14 @@
 #include "../include/factory/CGIHandlerFactory.hpp"
 #include "../include/response/DefaultResponseBuilder.hpp"
 #include "../include/config/validateRoot.hpp"
+#include "../include/utils/Debug.hpp"
 
 volatile sig_atomic_t g_signal_received = 0;
 
 static void sigHandler(int sig)
 {
     if (sig == SIGINT || sig == SIGTERM) g_signal_received = 1;
-    #ifndef NDEBUG
-    std::cout << "\n❎ [DEBUG] Signal received, shutting down…" << std::endl;
-    #endif
+    debug << "\n❎ [DEBUG] Signal received, shutting down…" << std::endl;
 }
 
 static std::string getDirectiveValue(const IConfig* node, const std::string& key, const std::string& defaultValue) 
@@ -73,25 +72,15 @@ int main(int argc, char** argv)
         validator.validationRoot();
 
         std::string serverName = parser.getServerName(serverNode);
-        #ifndef NDEBUG
-        std::cout << "[INFO] Server name: " << serverName << std::endl;
-        #endif
+        debug << "[INFO] Server name: " << serverName << std::endl;
         std::string bodySize = getDirectiveValue(serverNode, "body_size", "1000000");
-        #ifndef NDEBUG
-        std::cout << "[INFO] Max body size: " << bodySize << std::endl;
-        #endif
+        debug << "[INFO] Max body size: " << bodySize << std::endl;
         std::string getAllowedValue = getDirectiveValue(serverNode, "get_allowed", "true");
-        #ifndef NDEBUG
-        std::cout << "[INFO] GET method allowed: " << getAllowedValue << std::endl;
-        #endif
+        debug << "[INFO] GET method allowed: " << getAllowedValue << std::endl;
         std::string postAllowedValue = getDirectiveValue(serverNode, "post_allowed", "true");
-        #ifndef NDEBUG
-        std::cout << "[INFO] POST method allowed: " << postAllowedValue << std::endl;
-        #endif
+        debug << "[INFO] POST method allowed: " << postAllowedValue << std::endl;
         std::string deleteAllowedValue = getDirectiveValue(serverNode, "delete_allowed", "false");
-        #ifndef NDEBUG
-        std::cout << "[INFO] DELETE method allowed: " << deleteAllowedValue << std::endl;
-        #endif
+        debug << "[INFO] DELETE method allowed: " << deleteAllowedValue << std::endl;
         std::string rootPathConf = getDirectiveValue(serverNode, "root", "./www");
         std::string rootPath = Utils::resolveAndValidateDir(rootPathConf);
 
@@ -106,13 +95,9 @@ int main(int argc, char** argv)
         }
 
         std::string cgiDirRaw = getDirectiveValue(cgiLocationNode, "root", "cgi-bin");
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] CGI factory raw: " << cgiDirRaw << std::endl;
-        #endif
+        debug << "[DEBUG] CGI factory raw: " << cgiDirRaw << std::endl;
         std::string cgiDir = Utils::resolveAndValidateDir(rootPath + "/" + cgiDirRaw);
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] CGI directory: " << cgiDir << std::endl;
-        #endif
+        debug << "[DEBUG] CGI directory: " << cgiDir << std::endl;
 
         std::string cgiPath = getDirectiveValue(cgiLocationNode, "cgi_path", "/usr/bin/python");
 
@@ -136,8 +121,6 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    #ifndef NDEBUG
-    std::cout << "[DEBUG] Server closed" << std::endl;
-    #endif
+    debug << "[DEBUG] Server closed" << std::endl;
     return EXIT_SUCCESS;
 }

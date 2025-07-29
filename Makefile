@@ -1,67 +1,44 @@
-# **************************************************************************** #
-#                                CONFIGURACIÓN                                #
-# **************************************************************************** #
+NAME				:= webserv
+CXX					:= c++
 
-NAME        := webserv
-CXX         := c++
+CXXFLAGS_release	:= -Wall -Wextra -Werror -std=c++98
+CXXFLAGS_debug		:=  $(CXXFLAGS_release) -DNDEBUG
 
-# Flags comunes
-CXXFLAGS_BASE   := -Wall -Wextra -Werror -std=c++98 -MMD -MP -Iinclude
-DEBUG_FLAGS     := -g
-RELEASE_FLAGS   := -O3 -DNDEBUG
+SRC_DIR				:= src
+OBJ_DIR				:= obj
+INC_DIR				:= include
 
-# Selección de flags según target
-# Por defecto, "all" apunta a "release"
-CXXFLAGS_debug    := $(CXXFLAGS_BASE) $(DEBUG_FLAGS)
-CXXFLAGS_release  := $(CXXFLAGS_BASE) $(RELEASE_FLAGS)
+DEF_COLOR			= \033[0;39m
+GRAY				= \033[0;90m
+RED					= \033[0;31m
+GREEN				= \033[0;92m
+YELLOW				= \033[0;93m
+BLUE				= \033[0;94m
+MAGENTA				= \033[0;95m
+CYAN				= \033[0;96m
+WHITE				= \033[0;97m
+CLEAR				= \033[0m
 
-# Directorios
-SRC_DIR     := src
-OBJ_DIR     := obj
-INC_DIR     := include
+SRCS := $(shell find $(SRC_DIR) -name "*.cpp")
+OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
-# Colores
-DEF_COLOR   = \033[0;39m
-GRAY        = \033[0;90m
-RED         = \033[0;31m
-GREEN       = \033[0;92m
-YELLOW      = \033[0;93m
-BLUE        = \033[0;94m
-MAGENTA     = \033[0;95m
-CYAN        = \033[0;96m
-WHITE       = \033[0;97m
-CLEAR       = \033[0m
-
-# Fuentes y objetos
-SRCS        := $(shell find $(SRC_DIR) -name "*.cpp")
-OBJS        := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-DEPS        := $(OBJS:.o=.d)
-
-# Targets principales
-.PHONY: all debug release clean fclean re deleteme
 all: release
 
-# Modo debug: no define NDEBUG, incluye mensajes de #ifndef NDEBUG
-debug: CXXFLAGS := $(CXXFLAGS_debug)
-debug: $(NAME)
-	@echo "$(CYAN)[🐞 Debug build]$(CLEAR) $(NAME)"
-
-# Modo release: define NDEBUG, desactiva mensajes de debug
 release: CXXFLAGS := $(CXXFLAGS_release)
 release: $(NAME)
 	@echo "$(GREEN)[✅ Release build]$(CLEAR) $(NAME)"
 
-# Reglas de compilación
+debug: CXXFLAGS := $(CXXFLAGS_debug)
+debug: $(NAME)
+	@echo "$(CYAN)[🐞 Debug build]$(CLEAR) $(NAME)"
+
 $(NAME): $(OBJS)
-	@echo "$(CYAN)[🔧 Linking]$(CLEAR) $(NAME)"
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(dir $@)
-	@echo "$(BLUE)[Compiling]$(CLEAR) $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Limpieza
 clean:
 	@rm -rf $(OBJ_DIR)
 	@echo "$(YELLOW)[🧹 Cleaned object files]$(CLEAR)"
@@ -72,8 +49,4 @@ fclean: clean
 
 re: fclean all
 
-deleteme:
-	@echo "Creating temporal file: www/DELETEME.txt"
-	@touch "www/DELETEME.txt"
-
--include $(DEPS)
+.PHONY: all debug release clean fclean re deleteme

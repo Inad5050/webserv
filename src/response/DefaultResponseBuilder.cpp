@@ -1,7 +1,9 @@
 #include "../../include/response/DefaultResponseBuilder.hpp"
 #include "../../include/response/DefaultResponseBuilder.hpp"
 #include "../../include/utils/Utils.hpp"
+#include "../../include/utils/Debug.hpp"
 #include <sstream>
+#include <iostream>
 
 DefaultResponseBuilder::DefaultResponseBuilder() {}
 
@@ -11,25 +13,13 @@ Response DefaultResponseBuilder::build(const Payload& p)
 {
     Response res;
     res.setStatus(p.status, p.reason);
-    #ifndef NDEBUG
-
-    std::cout << "[DEBUG][DefaultResponseBuilder] Setting response status: " << p.status << " " << p.reason << "\n";
-    #endif
+    debug << "[DEBUG][DefaultResponseBuilder] Setting response status: " << p.status << " " << p.reason << "\n";
     res.setHeader("Content-Type",   p.mime);
-    #ifndef NDEBUG
-
-    std::cout << "[DEBUG][DefaultResponseBuilder] Setting response Content-Type: " << p.mime << "\n";
-    #endif
+    debug << "[DEBUG][DefaultResponseBuilder] Setting response Content-Type: " << p.mime << "\n";
     res.setHeader("Content-Length", Utils::intToString(p.body.size()));
-    #ifndef NDEBUG
-
-    std::cout << "[DEBUG][DefaultResponseBuilder] Setting response Content-Length: " << p.body.size() << "\n";
-    #endif
+    debug << "[DEBUG][DefaultResponseBuilder] Setting response Content-Length: " << p.body.size() << "\n";
     res.setHeader("Connection",     p.keepAlive ? "keep-alive" : "close");
-    #ifndef NDEBUG
-
-    std::cout << "[DEBUG][DefaultResponseBuilder] Setting response Connection: " << (p.keepAlive ? "keep-alive" : "close") << "\n";
-    #endif
+    debug << "[DEBUG][DefaultResponseBuilder] Setting response Connection: " << (p.keepAlive ? "keep-alive" : "close") << "\n";
     res.setBody(p.body);
     return res;
 }

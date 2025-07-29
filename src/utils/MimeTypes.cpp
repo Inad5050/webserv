@@ -1,4 +1,5 @@
 #include "../../include/utils/MimeTypes.hpp"
+#include "../../include/utils/Debug.hpp"
 #include <string>
 #include <iostream>
 
@@ -16,9 +17,7 @@ const char* MimeTypes::getContentType(const std::string& path)
 	std::size_t dot = path.find_last_of('.');
 	std::string ext = path.substr(dot);
 
-	#ifndef NDEBUG
-    std::cout << "[DEBUG] MimeTypes::getContentType() called with extension: " << ext << "\n" << std::endl;
-	#endif
+	debug << "[DEBUG] MimeTypes::getContentType() called with extension: " << ext << "\n" << std::endl;
 	
 	if (ext == ext_html) return ("text/html"); 
 	if (ext == ext_css)  return ("text/css");

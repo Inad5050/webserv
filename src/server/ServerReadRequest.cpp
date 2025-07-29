@@ -3,12 +3,11 @@
 #include "../../include/core/Response.hpp"
 #include "../../include/server/ClientBuffer.hpp"
 #include "../../include/utils/ErrorPageHandler.hpp"
+#include "../../include/utils/Debug.hpp"
 
 int Server::readRequest(int client_fd, ClientBuffer &additive_bff)
 {
-	#ifndef NDEBUG
-		std::cout << "[DEBUG][readRequest] START" << std::endl;
-	#endif
+	debug << "[DEBUG][readRequest] START" << std::endl;
 	
 	if (additive_bff.getClientFd() == -1)
 		additive_bff.setClientFd(client_fd);
@@ -31,32 +30,25 @@ int Server::readRequest(int client_fd, ClientBuffer &additive_bff)
 
 bool Server::getCompleteHeader(ClientBuffer &additive_bff, Request &req)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][getCompleteHeader] START" << std::endl;
-	#endif
+    debug << "[DEBUG][getCompleteHeader] START" << std::endl;
 	size_t pos = additive_bff.get_buffer().find("\r\n\r\n");
 	if (pos == std::string::npos)
-		return (
-		#ifndef NDEBUG
-		std::cout << "[DEBUG][getCompleteHeader] we didn't read all the header" << std::endl,
-		#endif
-		false);
+    {
+		debug << "[DEBUG][getCompleteHeader] we didn't read all the header" << std::endl;
+		return (false);
+    }
 	
 	if (req.getMethod() == "POST")
 		checkBodyLimits(additive_bff, req);
 
 	additive_bff.setHeaderEnd(pos + 4);
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][getCompleteHeader] finished reading header" << std::endl;
-    #endif
+    debug << "[DEBUG][getCompleteHeader] finished reading header" << std::endl;
 	return (true);
 }
 
 void Server::checkBodyLimits(ClientBuffer &additive_bff, Request &req)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][checkBodyLimits] START" << std::endl;
-    #endif
+    debug << "[DEBUG][checkBodyLimits] START" << std::endl;
 
 	bool chuncked = checkIsChunked(additive_bff, req);
 	bool contentLength = checkIsContentLength(additive_bff, req);
@@ -70,84 +62,67 @@ void Server::checkBodyLimits(ClientBuffer &additive_bff, Request &req)
 
 bool Server::checkIsChunked(ClientBuffer &additive_bff, const Request &req)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][checkIsChunked] START" << std::endl;
-	#endif
+    debug << "[DEBUG][checkIsChunked] START" << std::endl;
 	std::string transferEncoding = req.getHeader("transfer-encoding");
 	if (transferEncoding != "chunked")
 		return (false);
 	additive_bff.setChunked(true);
-	return (
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][checkIsChunked] is chunked" << std::endl,
-	#endif
-	true);
+	debug << "[DEBUG][checkIsChunked] is chunked" << std::endl;
+	return (true);
 }
 
 bool Server::checkIsContentLength(ClientBuffer &additive_bff, Request &req)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][checkIsContentLength] START" << std::endl;
-	#endif
+    debug << "[DEBUG][checkIsContentLength] START" << std::endl;
 	std::string contentLength = req.getHeader("content-length");
 	if (contentLength.empty())
 		return (false);
 	if (additive_bff.setcontentLength(contentLength))
 		throw (std::runtime_error("[ERROR][checkIsContentLength] Content-Length is not a number"));
 	checkMaxContentLength(contentLength, 0, req);
-	return (
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][checkIsContentLength] is content lenght = " << additive_bff.getcontentLength() << std::endl,
-	#endif
-	true);
+	debug << "[DEBUG][checkIsContentLength] is content lenght = " << additive_bff.getcontentLength() << std::endl;
+	return (true);
 }
 
 bool Server::areWeFinishedReading(ClientBuffer &additive_bff, Request &req)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][areWeFinishedReading] START" << std::endl;
-    #endif
+    debug << "[DEBUG][areWeFinishedReading] START" << std::endl;
 	if (additive_bff.getChunked())
 	{
 		ssize_t alreadyRead = additive_bff.get_buffer().length() - additive_bff.getHeaderEnd();
 		checkMaxContentLength("", alreadyRead, req);
 		
 		if (additive_bff.get_buffer().find("0\r\n\r\n") != std::string::npos)
-			return (validateChunkedBody(additive_bff),
-			#ifndef NDEBUG
-			std::cout << "[DEBUG][areWeFinishedReading](Chunked) finished reading" << std::endl,
-			#endif
-			true);
+        {
+			validateChunkedBody(additive_bff);
+			debug << "[DEBUG][areWeFinishedReading](Chunked) finished reading" << std::endl;
+			return (true);
+        }
 		else
-			return (
-			#ifndef NDEBUG
-			std::cout << "[DEBUG][areWeFinishedReading](Chunked) we still need to read" << std::endl,
-			#endif
-			false);
+        {
+			debug << "[DEBUG][areWeFinishedReading](Chunked) we still need to read" << std::endl;
+			return (false);
+        }
 	}
 	else if (additive_bff.getcontentLength() > 0)
 	{
 		if (static_cast<ssize_t>(additive_bff.get_buffer().length()) - additive_bff.getHeaderEnd() < additive_bff.getcontentLength())
-			return (
-			#ifndef NDEBUG
-			std::cout << "[DEBUG][areWeFinishedReading](contentLength) we still need to read" << std::endl,
-			#endif
-			false);
+        {
+			debug << "[DEBUG][areWeFinishedReading](contentLength) we still need to read" << std::endl;
+			return (false);
+        }
 		else
-			return (
-			#ifndef NDEBUG
-			std::cout << "[DEBUG][areWeFinishedReading](contentLength) finished reading" << std::endl,
-			#endif
-			true);
+        {
+			debug << "[DEBUG][areWeFinishedReading](contentLength) finished reading" << std::endl;
+			return (true);
+        }
 	}
 	return (true);
 }
 
 void Server::validateChunkedBody(ClientBuffer &additive_bff)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][validateChunkedBody] START" << std::endl;
-    #endif
+    debug << "[DEBUG][validateChunkedBody] START" << std::endl;
 	const std::string buffer = additive_bff.get_buffer();
 	size_t start_pos = buffer.find("\r\n\r\n") + 4;
 	size_t end_pos;
@@ -180,9 +155,7 @@ void Server::validateChunkedBody(ClientBuffer &additive_bff)
 
 void Server::checkMaxContentLength(std::string contentLength, ssize_t chunkedReadBytes, Request &req)
 {
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][checkMaxContentLength] START" << std::endl;
-	#endif
+	debug << "[DEBUG][checkMaxContentLength] START" << std::endl;
 	
 	const std::vector<IConfig*>& serverNodes = _cfg.getServerBlocks();
 	if (serverNodes.empty())
@@ -200,17 +173,13 @@ void Server::checkMaxContentLength(std::string contentLength, ssize_t chunkedRea
 
 	if (CfgBodySize.empty())
 	{
-		#ifndef NDEBUG
-		std::cout << "[DEBUG][checkMaxContentLength] no body_size on cfg" << std::endl;
-		#endif
+		debug << "[DEBUG][checkMaxContentLength] no body_size on cfg" << std::endl;
 		return;
 	}
 	if (CfgBodySize == default_value)
 		CfgBodySize = _cfg.getDirectiveValue(serverNodes[serverIndex], "body_size", default_value);
 
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][checkMaxContentLength] CfgBodySize = " << CfgBodySize << std::endl;
-	#endif
+	debug << "[DEBUG][checkMaxContentLength] CfgBodySize = " << CfgBodySize << std::endl;
 	
 	ssize_t lenNmb;
 	ssize_t MaxLenNmb;
@@ -224,9 +193,7 @@ void Server::checkMaxContentLength(std::string contentLength, ssize_t chunkedRea
 	std::stringstream MaxLenght(CfgBodySize);
 	MaxLenght >> MaxLenNmb;
 
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][checkMaxContentLength] lenNmb = " << lenNmb << " MaxLenNmb = " << MaxLenNmb << std::endl;
-	#endif
+	debug << "[DEBUG][checkMaxContentLength] lenNmb = " << lenNmb << " MaxLenNmb = " << MaxLenNmb << std::endl;
 
 	if (MaxLenght.fail())
 		throw (_error = 500, std::runtime_error("[ERROR][checkMaxContentLength] error on getDirectiveValue"));
@@ -236,9 +203,7 @@ void Server::checkMaxContentLength(std::string contentLength, ssize_t chunkedRea
 
 size_t Server::findServerIndex(const Request& req)
 {
-    #ifndef NDEBUG
-	    std::cout << "[DEBUG][findServerIndex] START" << std::endl;
-	#endif
+    debug << "[DEBUG][findServerIndex] START" << std::endl;
 	std::string requestHost = req.getHeader("host");
 	if (requestHost.empty())
 		return (0);
@@ -255,11 +220,10 @@ size_t Server::findServerIndex(const Request& req)
 		serverName = _cfg.getServerName(_serverList[i]);
 
 		if (serverName == requestHost)
-			return (
-			#ifndef NDEBUG
-			std::cout << "[DEBUG][findServerIndex] serverIndex = " << i << std::endl,
-			#endif
-			i);
+        {
+			debug << "[DEBUG][findServerIndex] serverIndex = " << i << std::endl;
+			return (i);
+        }
 		else if (pos != std::string::npos)
 		{
 			getHostAndPort(_serverList[i], serverHost, serverPort);
@@ -269,16 +233,12 @@ size_t Server::findServerIndex(const Request& req)
 
 			if ((requestIP == serverHost || (requestIP == "localhost" && serverHost == "127.0.0.1")) \
 			&& requestPort ==  serverPort)
-				return (
-				#ifndef NDEBUG
-				std::cout << "[DEBUG][findServerIndex] serverIndex = " << i << std::endl,
-				#endif
-				i);
+            {
+				debug << "[DEBUG][findServerIndex] serverIndex = " << i << std::endl;
+				return (i);
+            }
 		}
 	}
-	return (
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][findServerIndex] serverIndex = 0" << std::endl,
-	#endif
-	0);
+	debug << "[DEBUG][findServerIndex] serverIndex = 0" << std::endl;
+	return (0);
 }

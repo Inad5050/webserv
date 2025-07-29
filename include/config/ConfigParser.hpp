@@ -1,8 +1,8 @@
 #ifndef CONFIGPARSER_HPP
 #define CONFIGPARSER_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/config/IConfig.hpp"
+#include "../libraries.hpp"
+#include "../config/IConfig.hpp"
 
 class ConfigParser {
     private:

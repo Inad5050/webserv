@@ -1,12 +1,11 @@
 #include "../../include/utils/AutoIndex.hpp"
 #include "../../include/utils/MimeTypes.hpp"
 #include "../../include/utils/ErrorPageHandler.hpp"
+#include "../../include/utils/Debug.hpp"
 
 Response AutoIndex::autoindex(bool &autoindexFlag, std::string uri, std::string fullPath, const Request& request, IResponseBuilder* _builder)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][AutoIndex][autoindex] START" << std::endl;
-	#endif
+    debug << "[DEBUG][AutoIndex][autoindex] START" << std::endl;
 
     struct stat s;
     if (stat(fullPath.c_str(), &s) == 0 && S_ISDIR(s.st_mode))
@@ -14,7 +13,7 @@ Response AutoIndex::autoindex(bool &autoindexFlag, std::string uri, std::string 
         if (uri[uri.size() - 1] != '/')
             uri += "/";
 
-		ConfigParser* 			cfg = request.getCfg();
+		ConfigParser* cfg = request.getCfg();
 		std::vector<IConfig*>	servers = cfg->getServerBlocks();
 		size_t					serverIndex = request.getServerIndex();
 		const IConfig*			location_node = cfg->findLocationBlock(servers[serverIndex], uri);
@@ -43,9 +42,7 @@ Response AutoIndex::autoindex(bool &autoindexFlag, std::string uri, std::string 
 
 std::string AutoIndex::renderAutoindexPage(const std::string& displayPath, const std::string& physicalPath)
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][AutoIndex][renderAutoindexPage] START" << std::endl;
-	#endif
+    debug << "[DEBUG][AutoIndex][renderAutoindexPage] START" << std::endl;
 
 	std::string currentPath = displayPath;
     if (currentPath.empty() || currentPath[currentPath.length() - 1] != '/')
@@ -79,9 +76,7 @@ std::string AutoIndex::renderAutoindexPage(const std::string& displayPath, const
 Response AutoIndex::renderIndexFile(ConfigParser* &cfg, const IConfig* &location_node, const IConfig* server, \
 std::string fullPath, bool &autoindexFlag, IResponseBuilder* builder, const Request& request)
 {
-	#ifndef NDEBUG
-	std::cout << "[DEBUG][AutoIndex][renderIndexFile] START" << std::endl;
-	#endif
+	debug << "[DEBUG][AutoIndex][renderIndexFile] START" << std::endl;
 	
 	std::string indexFile = cfg->getDirectiveValue(location_node, "index", "default");
 	if (indexFile == "default")

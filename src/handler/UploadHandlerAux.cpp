@@ -1,4 +1,6 @@
 #include "../../include/handler/UploadHandler.hpp"
+#include "../../include/utils/Debug.hpp"
+#include <iostream>
 
 Response UploadHandler::handleMultipartUpload(const Request& req, std::string contentType)
 {
@@ -19,9 +21,7 @@ Response UploadHandler::handleMultipartUpload(const Request& req, std::string co
 		uploadResponse(req,400, "Bad Request", "text/html", ""));
 	
 	std::string destinationPath = _uploadsPath + "/" + fileName;
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][UploadHandler] destinationPath = " << destinationPath << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] destinationPath = " << destinationPath << std::endl;
 	std::ofstream outputFile(destinationPath.c_str(), std::ios::out | std::ios::binary);
 	if (!outputFile.is_open()) 
 		return (std::cout << "[ERROR][UploadHandler] 500 Cannot open file: " << destinationPath << std::endl, \
@@ -29,9 +29,7 @@ Response UploadHandler::handleMultipartUpload(const Request& req, std::string co
 
 	outputFile.write(fileContent.data(), fileContent.size());
 	outputFile.close();
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][UploadHandler] UPLOADED file: " << destinationPath << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] UPLOADED file: " << destinationPath << std::endl;
 	return (uploadResponse(req,200, "OK", "text/plain", "File received and uploaded"));
 }
 
@@ -90,11 +88,9 @@ bool UploadHandler::parseMultipartBody(const std::string& body, const std::strin
     return (!fileName.empty());
 }
 
-Response UploadHandler::handleRawUpload(const Request& req)
+Response UploadHandler::handleRawUpload(const Request& req) 
 {   
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][UploadHandler] handleRawUpload" << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] handleRawUpload" << std::endl;
 	std::string fileContent = req.getBody();
     if (fileContent.empty())
 		return (std::cerr << "[ERROR][UploadHandler] Empty body for raw upload" << std::endl,
@@ -109,9 +105,7 @@ Response UploadHandler::handleRawUpload(const Request& req)
 		fileName = path.substr(lastSlash + 1);
 
     std::string destinationPath = _uploadsPath + "/" + fileName;
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][UploadHandler] destinationPath for raw upload = " << destinationPath << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] destinationPath for raw upload = " << destinationPath << std::endl;
 
     std::ofstream outputFile(destinationPath.c_str(), std::ios::out | std::ios::binary);
     if (!outputFile.is_open())
@@ -120,17 +114,13 @@ Response UploadHandler::handleRawUpload(const Request& req)
 
     outputFile.write(fileContent.c_str(), fileContent.size());
     outputFile.close();
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][UploadHandler] UPLOADED raw file: " << destinationPath << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] UPLOADED raw file: " << destinationPath << std::endl;
     return (uploadResponse(req,200, "OK", "text/html", "File received and uploaded"));
 }
 
 Response UploadHandler::handleUrlEncodedUpload(const Request& req) 
 {
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][UploadHandler] handleUrlEncodedUpload" << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] handleUrlEncodedUpload" << std::endl;
     std::string body = req.getBody();
 
     size_t separatorPos = body.find('=');
@@ -150,9 +140,7 @@ Response UploadHandler::handleUrlEncodedUpload(const Request& req)
 
     outputFile.write(fileContentDecoded.c_str(), fileContentDecoded.size());
     outputFile.close();
-    #ifndef NDEBUG
-	std::cout << "[DEBUG][UploadHandler] UPLOADED encoded file: " << destinationPath << std::endl;
-    #endif
+    debug << "[DEBUG][UploadHandler] UPLOADED encoded file: " << destinationPath << std::endl;
     return (uploadResponse(req,200, "OK", "text/html", "File received and uploaded"));
 }
 

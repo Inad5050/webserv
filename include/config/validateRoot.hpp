@@ -1,7 +1,7 @@
 #ifndef VALIDATE_ROOT_HPP
 #define VALIDATE_ROOT_HPP
 
-#include "../include/libraries.hpp"
+#include "../libraries.hpp"
 
 class validateRoot {
 	private:

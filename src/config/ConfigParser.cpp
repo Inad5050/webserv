@@ -1,5 +1,6 @@
 #include "../../include/config/ConfigParser.hpp"
 #include "../../include/config/ConfigNode.hpp"
+#include "../../include/utils/Debug.hpp"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -74,9 +75,7 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
     std::string line;
     const std::string delimiters = " \t\r\n";
     const std::string special_chars = "{};";
-    #ifndef NDEBUG
-    std::cout << "[DEBUG] Iniciando tokenización del archivo de configuración." << std::endl;
-    #endif
+    debug << "[DEBUG] Iniciando tokenización del archivo de configuración." << std::endl;
     int processed_servers = 0;
     int brace_count = 0;
     bool inside_server = false;
@@ -84,9 +83,7 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
     std::vector<std::string> current_server_tokens;
     
     while (std::getline(file, line)) {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG][NEW_LINE]: " << line << std::endl;
-        #endif
+        debug << "[DEBUG][NEW_LINE]: " << line << std::endl;
      
         size_t comment_pos = line.find('#');
         if (comment_pos != std::string::npos) {
@@ -101,9 +98,7 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
         
         if (line.find("server") != std::string::npos && !inside_server) {
             found_server_keyword = true;
-            #ifndef NDEBUG
-            std::cout << "[DEBUG] Encontrada palabra clave 'server'" << std::endl;
-            #endif
+            debug << "[DEBUG] Encontrada palabra clave 'server'" << std::endl;
         }
     
         if (found_server_keyword && line.find("{") != std::string::npos && !inside_server) {
@@ -111,9 +106,7 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
             found_server_keyword = false;
             brace_count = 0;
             current_server_tokens.clear();
-            #ifndef NDEBUG
-            std::cout << "[DEBUG] Iniciando procesamiento del servidor " << (processed_servers + 1) << std::endl;
-            #endif
+            debug << "[DEBUG] Iniciando procesamiento del servidor " << (processed_servers + 1) << std::endl;
         }
         
         if (inside_server || found_server_keyword) {
@@ -133,9 +126,7 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
                         if (!inside_server && found_server_keyword) {
                             inside_server = true;
                             found_server_keyword = false;
-                            #ifndef NDEBUG
-                            std::cout << "[DEBUG] Iniciando procesamiento del servidor " << (processed_servers + 1) << std::endl;
-                            #endif
+                            debug << "[DEBUG] Iniciando procesamiento del servidor " << (processed_servers + 1) << std::endl;
                         }
                     } else if (line[start] == '}') {
                         brace_count--;
@@ -145,9 +136,7 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
                                     tokens.push_back(current_server_tokens[i]);
                                 }
                                 processed_servers++;
-                                #ifndef NDEBUG
-                                std::cout << "[DEBUG] Servidor " << processed_servers << " validado y agregado." << std::endl;
-                                #endif
+                                debug << "[DEBUG] Servidor " << processed_servers << " validado y agregado." << std::endl;
                           
                             inside_server = false;
                             current_server_tokens.clear();
@@ -172,12 +161,8 @@ std::vector<std::string> ConfigParser::tokenize(std::ifstream& file) {
         }
     }
     
-    #ifndef NDEBUG
-    std::cout << "[DEBUG] Tokenización completada. Total tokens válidos: " << tokens.size() << std::endl;
-    #endif
-    #ifndef NDEBUG
-    std::cout << "[DEBUG] Servidores válidos procesados: " << processed_servers << std::endl;
-    #endif
+    debug << "[DEBUG] Tokenización completada. Total tokens válidos: " << tokens.size() << std::endl;
+    debug << "[DEBUG] Servidores válidos procesados: " << processed_servers << std::endl;
     return tokens;
 }
 
@@ -220,9 +205,7 @@ std::string ConfigParser::getDirectiveValue(const IConfig* node, const std::stri
 
 std::string ConfigParser::getServerName(const IConfig* serverNode) 
 {
-    #ifndef NDEBUG
-    std::cout << "[DEBUG][getServerName] START" << std::endl;
-    #endif
+    debug << "[DEBUG][getServerName] START" << std::endl;
     const std::vector<std::string>& values = serverNode->getValues();
     for (size_t i = 0; i < values.size(); ++i) {
         std::cout << values[i] << std::endl; 
@@ -283,14 +266,10 @@ std::string ConfigParser::getErrorPage(int errorCode, const IConfig* serverNode)
                         std::string filePath = values[0];
                         
                         if (validateErrorPagePath(filePath)) {
-                            #ifndef NDEBUG
-                            std::cout << "[DEBUG] Página de error " << errorCode << " configurada: " << filePath << std::endl;
-                            #endif
+                            debug << "[DEBUG] Página de error " << errorCode << " configurada: " << filePath << std::endl;
                             return filePath;
                         } else {
-                            #ifndef NDEBUG
-                            std::cout << "[DEBUG] Página de error " << errorCode << " no sigue el formato correcto. Usando página por defecto." << std::endl;
-                            #endif
+                            debug << "[DEBUG] Página de error " << errorCode << " no sigue el formato correcto. Usando página por defecto." << std::endl;
                             return "";
                         }
                     }
@@ -308,9 +287,7 @@ bool ConfigParser::validateErrorPagePath(const std::string& filePath) const {
         return true;
     }
 
-    #ifndef NDEBUG
-    std::cout << "[DEBUG] Archivo de error no encontrado: " << filePath << std::endl;
-    #endif
+    debug << "[DEBUG] Archivo de error no encontrado: " << filePath << std::endl;
     return false;
 }
 
@@ -370,37 +347,27 @@ const IConfig* ConfigParser::findLocationBlock(const IConfig* serverNode, const 
 bool ConfigParser::validateServerTokens(const std::vector<std::string>& serverTokens) const 
 {
     if (serverTokens.empty()) {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] Validación falló: tokens vacíos" << std::endl;
-        #endif
+        debug << "[DEBUG] Validación falló: tokens vacíos" << std::endl;
         return false;
     }
     
     if (serverTokens.size() < 3) {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] Validación falló: estructura mínima no cumplida" << std::endl;
-        #endif
+        debug << "[DEBUG] Validación falló: estructura mínima no cumplida" << std::endl;
         return false;
     }
     
     if (serverTokens[0] != "server") {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] Validación falló: no comienza con 'server'" << std::endl;
-        #endif
+        debug << "[DEBUG] Validación falló: no comienza con 'server'" << std::endl;
         return false;
     }
     
     if (serverTokens[1] != "{") {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] Validación falló: no tiene '{' después de 'server'" << std::endl;
-        #endif
+        debug << "[DEBUG] Validación falló: no tiene '{' después de 'server'" << std::endl;
         return false;
     }
     
     if (serverTokens.back() != "}") {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] Validación falló: no termina con '}'" << std::endl;
-        #endif
+        debug << "[DEBUG] Validación falló: no termina con '}'" << std::endl;
         return false;
     }
     
@@ -412,9 +379,7 @@ bool ConfigParser::validateServerTokens(const std::vector<std::string>& serverTo
         } else if (serverTokens[i] == "}") {
             brace_count--;
             if (brace_count < 0) {
-                #ifndef NDEBUG
-                std::cout << "[DEBUG] Validación falló: llaves desbalanceadas" << std::endl;
-                #endif
+                debug << "[DEBUG] Validación falló: llaves desbalanceadas" << std::endl;
                 return false;
             }
         }
@@ -486,9 +451,7 @@ bool ConfigParser::validateServerTokens(const std::vector<std::string>& serverTo
     }
     
     if (!hasPort) {
-        #ifndef NDEBUG
-        std::cout << "[DEBUG] Validación falló: falta directiva 'port'" << std::endl;
-        #endif
+        debug << "[DEBUG] Validación falló: falta directiva 'port'" << std::endl;
         return false;
     }
     
