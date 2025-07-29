@@ -1,8 +1,8 @@
 #ifndef CONFIG_NODE_HPP
 #define CONFIG_NODE_HPP
 
-#include "../libraries.hpp"
-#include "../config/IConfig.hpp"
+#include "libraries.hpp"
+#include "config/IConfig.hpp"
 
 class ConfigNode : public IConfig {
 private:

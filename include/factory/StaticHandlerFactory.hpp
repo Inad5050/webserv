@@ -1,9 +1,9 @@
 #ifndef STATICHANDLERFACTORY_HPP
 #define STATICHANDLERFACTORY_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/factory/IHandlerFactory.hpp"
-#include "../include/response/IResponseBuilder.hpp"
+#include "libraries.hpp"
+#include "factory/IHandlerFactory.hpp"
+#include "response/IResponseBuilder.hpp"
 
 class IResponseBuilder;
 

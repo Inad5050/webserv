@@ -1,6 +1,6 @@
-#include "../../include/config/ConfigParser.hpp"
-#include "../../include/config/ConfigNode.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "config/ConfigParser.hpp"
+#include "config/ConfigNode.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>

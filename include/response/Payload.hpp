@@ -1,7 +1,7 @@
 #ifndef PAYLOAD_HPP
 #define PAYLOAD_HPP
 
-#include "../include/libraries.hpp"
+#include "libraries.hpp"
 
 struct Payload 
 {

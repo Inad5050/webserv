@@ -1,7 +1,7 @@
-#include "../../include/utils/AutoIndex.hpp"
-#include "../../include/utils/MimeTypes.hpp"
-#include "../../include/utils/ErrorPageHandler.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "utils/AutoIndex.hpp"
+#include "utils/MimeTypes.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "utils/Debug.hpp"
 
 Response AutoIndex::autoindex(bool &autoindexFlag, std::string uri, std::string fullPath, const Request& request, IResponseBuilder* _builder)
 {

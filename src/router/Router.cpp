@@ -1,7 +1,7 @@
-#include "../../include/router/Router.hpp"
-#include "../../include/utils/Utils.hpp"
-#include "../../include/utils/ErrorPageHandler.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "router/Router.hpp"
+#include "utils/Utils.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 
 Router::Router(const std::string& absRoot) : _absRoot(absRoot)

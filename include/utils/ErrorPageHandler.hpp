@@ -1,8 +1,8 @@
 #ifndef ERROR_PAGE_HANDLER_HPP
 #define ERROR_PAGE_HANDLER_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/core/Request.hpp"
+#include "libraries.hpp"
+#include "core/Request.hpp"
 
 class ErrorPageHandler {
     private:

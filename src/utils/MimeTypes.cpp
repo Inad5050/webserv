@@ -1,5 +1,5 @@
-#include "../../include/utils/MimeTypes.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "utils/MimeTypes.hpp"
+#include "utils/Debug.hpp"
 #include <string>
 #include <iostream>
 

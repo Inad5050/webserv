@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../include/libraries.hpp"
-#include "../include/core/Request.hpp"
-#include "../include/core/Response.hpp"
-#include "../include/response/Payload.hpp"
-#include "../include/response/DefaultResponseBuilder.hpp"
-#include "../include/response/IResponseBuilder.hpp"
+#include "libraries.hpp"
+#include "core/Request.hpp"
+#include "core/Response.hpp"
+#include "response/Payload.hpp"
+#include "response/DefaultResponseBuilder.hpp"
+#include "response/IResponseBuilder.hpp"
 
 class AutoIndex 
 {

@@ -1,11 +1,11 @@
-#include "../../include/handler/CGIHandler.hpp"
-#include "../../include/handler/StaticFileHandler.hpp"
-#include "../../include/libraries.hpp"
-#include "../../include/utils/ErrorPageHandler.hpp"
-#include "../../include/utils/Utils.hpp"
-#include "../../include/utils/AutoIndex.hpp"
-#include "../../include/core/Request.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "handler/CGIHandler.hpp"
+#include "handler/StaticFileHandler.hpp"
+#include "libraries.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "utils/Utils.hpp"
+#include "utils/AutoIndex.hpp"
+#include "core/Request.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 
 int CGIHandler::identifyScriptType(const Request &req)

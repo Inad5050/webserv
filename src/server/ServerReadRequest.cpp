@@ -1,9 +1,9 @@
-#include "../../include/server/Server.hpp"
-#include "../../include/core/Request.hpp"
-#include "../../include/core/Response.hpp"
-#include "../../include/server/ClientBuffer.hpp"
-#include "../../include/utils/ErrorPageHandler.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "server/Server.hpp"
+#include "core/Request.hpp"
+#include "core/Response.hpp"
+#include "server/ClientBuffer.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "utils/Debug.hpp"
 
 int Server::readRequest(int client_fd, ClientBuffer &additive_bff)
 {

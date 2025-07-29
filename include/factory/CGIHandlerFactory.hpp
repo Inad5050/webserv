@@ -1,11 +1,11 @@
 #ifndef CGIHANDLERFACTORY_HPP
 #define CGIHANDLERFACTORY_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/factory/CGIHandlerFactory.hpp"
-#include "../include/factory/IHandlerFactory.hpp"
-#include "../include/config/ConfigParser.hpp"
-#include "../include/handler/IRequestHandler.hpp"
+#include "libraries.hpp"
+#include "factory/CGIHandlerFactory.hpp"
+#include "factory/IHandlerFactory.hpp"
+#include "config/ConfigParser.hpp"
+#include "handler/IRequestHandler.hpp"
 
 class IResponseBuilder;
 

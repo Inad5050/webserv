@@ -1,5 +1,5 @@
-#include "../../include/handler/UploadHandler.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "handler/UploadHandler.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 
 Response UploadHandler::handleMultipartUpload(const Request& req, std::string contentType)

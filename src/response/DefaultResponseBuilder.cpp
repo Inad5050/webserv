@@ -1,7 +1,7 @@
-#include "../../include/response/DefaultResponseBuilder.hpp"
-#include "../../include/response/DefaultResponseBuilder.hpp"
-#include "../../include/utils/Utils.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "response/DefaultResponseBuilder.hpp"
+#include "response/DefaultResponseBuilder.hpp"
+#include "utils/Utils.hpp"
+#include "utils/Debug.hpp"
 #include <sstream>
 #include <iostream>
 

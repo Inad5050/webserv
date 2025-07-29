@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../include/libraries.hpp"
+#include "libraries.hpp"
 
-#include "../include/handler/IRequestHandler.hpp"
-#include "../include/core/Request.hpp"
-#include "../include/core/Response.hpp"
-#include "../include/response/IResponseBuilder.hpp"
+#include "handler/IRequestHandler.hpp"
+#include "core/Request.hpp"
+#include "core/Response.hpp"
+#include "response/IResponseBuilder.hpp"
 
 class IResponseBuilder;
 

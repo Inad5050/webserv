@@ -1,13 +1,13 @@
-#include "../include/server/Server.hpp"
-#include "../include/core/Request.hpp"
-#include "../include/core/Response.hpp"
-#include "../include/server/ClientBuffer.hpp"
-#include "../include/utils/ErrorPageHandler.hpp"
-#include "../include/config/ConfigParser.hpp"
-#include "../include/factory/IHandlerFactory.hpp"
-#include "../include/factory/UploadHandlerFactory.hpp"
-#include "../include/factory/CGIHandlerFactory.hpp"
-#include "../include/utils/Debug.hpp"
+#include "server/Server.hpp"
+#include "core/Request.hpp"
+#include "core/Response.hpp"
+#include "server/ClientBuffer.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "config/ConfigParser.hpp"
+#include "factory/IHandlerFactory.hpp"
+#include "factory/UploadHandlerFactory.hpp"
+#include "factory/CGIHandlerFactory.hpp"
+#include "utils/Debug.hpp"
 
 Server::Server(ConfigParser& cfg, std::string cgiPath, const std::string& rootPath, std::string uploadPath, IResponseBuilder *builder):
 _cfg(cfg), _cgiPath(cgiPath), _rootPath(rootPath), _uploadPath(uploadPath), _responseBuilder(builder), _router(Router(_rootPath)), _error(-1)

@@ -1,7 +1,7 @@
-#include "../../include/factory/CGIHandlerFactory.hpp"
-#include "../../include/handler/CGIHandler.hpp"
-#include "../../include/response/IResponseBuilder.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "factory/CGIHandlerFactory.hpp"
+#include "handler/CGIHandler.hpp"
+#include "response/IResponseBuilder.hpp"
+#include "utils/Debug.hpp"
 
 CGIHandlerFactory::CGIHandlerFactory(const std::string& cgiRoot, IResponseBuilder*  builder, const ConfigParser& cfg): _cgiRoot(cgiRoot), _builder(builder), _cfg(cfg)
 {

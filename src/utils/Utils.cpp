@@ -1,4 +1,4 @@
-#include "../../include/utils/Utils.hpp"
+#include "utils/Utils.hpp"
 #include <sstream>
 #include <map>
 #include <cctype>
@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <dirent.h>
 #include <string>
-#include "../../include/utils/Debug.hpp"
+#include "utils/Debug.hpp"
 
 std::string Utils::intToString(int value) {
 	std::ostringstream oss;

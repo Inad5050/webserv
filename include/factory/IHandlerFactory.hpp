@@ -1,8 +1,8 @@
 #ifndef IHANDLERFACTORY_HPP
 #define IHANDLERFACTORY_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/handler/IRequestHandler.hpp"
+#include "libraries.hpp"
+#include "handler/IRequestHandler.hpp"
 
 class IHandlerFactory 
 {

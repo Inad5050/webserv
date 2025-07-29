@@ -6,17 +6,17 @@
 #include <fstream>
 #include <csignal>
 
-#include "../include/libraries.hpp"
-#include "../include/config/ConfigParser.hpp"
-#include "../include/server/Server.hpp"
-#include "../include/utils/Utils.hpp"
-#include "../include/router/Router.hpp"
-#include "../include/factory/StaticHandlerFactory.hpp"
-#include "../include/factory/UploadHandlerFactory.hpp"
-#include "../include/factory/CGIHandlerFactory.hpp"
-#include "../include/response/DefaultResponseBuilder.hpp"
-#include "../include/config/validateRoot.hpp"
-#include "../include/utils/Debug.hpp"
+#include "libraries.hpp"
+#include "config/ConfigParser.hpp"
+#include "server/Server.hpp"
+#include "utils/Utils.hpp"
+#include "router/Router.hpp"
+#include "factory/StaticHandlerFactory.hpp"
+#include "factory/UploadHandlerFactory.hpp"
+#include "factory/CGIHandlerFactory.hpp"
+#include "response/DefaultResponseBuilder.hpp"
+#include "config/validateRoot.hpp"
+#include "utils/Debug.hpp"
 
 volatile sig_atomic_t g_signal_received = 0;
 

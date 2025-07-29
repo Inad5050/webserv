@@ -1,5 +1,5 @@
-#include "../include/server/Server.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "server/Server.hpp"
+#include "utils/Debug.hpp"
 
 void Server::checkCookies(Request &req)
 {

@@ -1,9 +1,9 @@
 #ifndef DEFAULT_RESPONSE_BUILDER_HPP
 #define DEFAULT_RESPONSE_BUILDER_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/core/Response.hpp"
-#include "../include/response/IResponseBuilder.hpp"
+#include "libraries.hpp"
+#include "core/Response.hpp"
+#include "response/IResponseBuilder.hpp"
 
 class DefaultResponseBuilder : public IResponseBuilder {
 public:

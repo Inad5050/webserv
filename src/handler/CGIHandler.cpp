@@ -1,10 +1,10 @@
-#include "../../include/handler/CGIHandler.hpp"
-#include "../../include/libraries.hpp"
-#include "../../include/utils/ErrorPageHandler.hpp"
-#include "../../include/utils/Utils.hpp"
-#include "../../include/utils/AutoIndex.hpp"
-#include "../../include/core/Request.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "handler/CGIHandler.hpp"
+#include "libraries.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "utils/Utils.hpp"
+#include "utils/AutoIndex.hpp"
+#include "core/Request.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 
 CGIHandler::CGIHandler(const std::string& cgiRoot, IResponseBuilder* builder, const ConfigParser& cfg): 

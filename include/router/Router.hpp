@@ -1,8 +1,8 @@
 #ifndef ROUTER_HPP
 #define ROUTER_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/factory/IHandlerFactory.hpp"
+#include "libraries.hpp"
+#include "factory/IHandlerFactory.hpp"
 
 class Router 
 {

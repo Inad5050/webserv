@@ -1,11 +1,11 @@
-#include "../../include/handler/StaticFileHandler.hpp"
-#include "../../include/utils/Utils.hpp"
-#include "../../include/utils/ErrorPageHandler.hpp"
-#include "../../include/utils/MimeTypes.hpp"
-#include "../../include/utils/AutoIndex.hpp"
-#include "../../include/response/IResponseBuilder.hpp"
-#include "../../include/config/ConfigParser.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "handler/StaticFileHandler.hpp"
+#include "utils/Utils.hpp"
+#include "utils/ErrorPageHandler.hpp"
+#include "utils/MimeTypes.hpp"
+#include "utils/AutoIndex.hpp"
+#include "response/IResponseBuilder.hpp"
+#include "config/ConfigParser.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 
 StaticFileHandler::StaticFileHandler(const std::string& root, IResponseBuilder* b, const ConfigParser& cfg): _rootPath(root), _builder(b), _cfg(cfg)

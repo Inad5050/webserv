@@ -1,10 +1,9 @@
+#ifndef UPLOADHANDLER_HPP
+#define UPLOADHANDLER_HPP
 
-#ifndef UploadHandler_HPP
-#define UploadHandler_HPP
-
-#include "../include/libraries.hpp"
-#include "../include/response/IResponseBuilder.hpp"
-#include "../include/handler/IRequestHandler.hpp"
+#include "libraries.hpp"
+#include "response/IResponseBuilder.hpp"
+#include "handler/IRequestHandler.hpp"
 
 class UploadHandler : public IRequestHandler 
 {

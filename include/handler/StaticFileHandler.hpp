@@ -1,13 +1,13 @@
 #ifndef STATICFILEHANDLER_HPP
 #define STATICFILEHANDLER_HPP
 
-#include "../include/libraries.hpp"
-#include "../include/response/Payload.hpp"
-#include "../include/config/ConfigParser.hpp"
-#include "../include/handler/StaticFileHandler.hpp"
-#include "../include/core/Response.hpp"
-#include "../include/core/Request.hpp"
-#include "../include/handler/IRequestHandler.hpp"
+#include "libraries.hpp"
+#include "response/Payload.hpp"
+#include "config/ConfigParser.hpp"
+#include "handler/StaticFileHandler.hpp"
+#include "core/Response.hpp"
+#include "core/Request.hpp"
+#include "handler/IRequestHandler.hpp"
 
 class IResponseBuilder;
 

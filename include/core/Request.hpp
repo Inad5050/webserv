@@ -1,10 +1,10 @@
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
-#include "../libraries.hpp"
-#include "../config/ConfigParser.hpp"
-#include "../core/Request.hpp"
-#include "../server/Cookies.hpp"
+#include "libraries.hpp"
+#include "config/ConfigParser.hpp"
+#include "core/Request.hpp"
+#include "server/Cookies.hpp"
 
 class Request 
 {

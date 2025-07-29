@@ -1,7 +1,7 @@
 #ifndef ICONFIG_HPP
 #define ICONFIG_HPP
 
-#include "../libraries.hpp"
+#include "libraries.hpp"
 
 class IConfig {
 public:

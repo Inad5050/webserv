@@ -1,9 +1,9 @@
-#include "../../include/utils/ErrorPageHandler.hpp"
+#include "utils/ErrorPageHandler.hpp"
 #include <fstream>
 #include <sstream>
 #include <sys/stat.h>
 #include "iostream"
-#include "../../include/utils/Debug.hpp"
+#include "utils/Debug.hpp"
 
 const ErrorPageHandler::ErrorPageEntry ErrorPageHandler::errorPages[] = {
 	{400, "/error_pages/400.html"},

@@ -1,4 +1,4 @@
-#include "../../include/config/ConfigNode.hpp"
+#include "config/ConfigNode.hpp"
 
 ConfigNode::ConfigNode() {}
 

@@ -1,7 +1,7 @@
-#include "../../include/factory/StaticHandlerFactory.hpp"
-#include "../../include/handler/StaticFileHandler.hpp"
-#include "../../include/response/IResponseBuilder.hpp"
-#include "../../include/utils/Debug.hpp"
+#include "factory/StaticHandlerFactory.hpp"
+#include "handler/StaticFileHandler.hpp"
+#include "response/IResponseBuilder.hpp"
+#include "utils/Debug.hpp"
 #include <iostream>
 
 StaticHandlerFactory::StaticHandlerFactory(const std::string& rootDir, IResponseBuilder* builder, const ConfigParser& cfg): _rootDir(rootDir), _builder(builder), _cfg(cfg)

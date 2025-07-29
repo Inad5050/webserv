@@ -5,7 +5,7 @@
 #include <cstdlib> 
 #include <algorithm>
 #include <cctype>
-#include "../../include/config/validateRoot.hpp"
+#include "config/validateRoot.hpp"
 
 bool isNotSpace(unsigned char ch) {
     return !std::isspace(ch);

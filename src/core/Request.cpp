@@ -1,7 +1,7 @@
-#include "../../include/core/Request.hpp"
+#include "core/Request.hpp"
 #include <sstream>
 #include <iostream>
-#include "../../include/utils/Debug.hpp"
+#include "utils/Debug.hpp"
 
 Request::Request(): _cfg(NULL), _serverIndex(-1), _redirection(false)
 {}

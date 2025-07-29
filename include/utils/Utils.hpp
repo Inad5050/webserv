@@ -1,7 +1,7 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
-#include "../include/libraries.hpp"
+#include "libraries.hpp"
 
 using std::cout;
 using std::endl;

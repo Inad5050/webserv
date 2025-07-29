@@ -1,4 +1,4 @@
-#include "../include/server/Cookies.hpp"
+#include "server/Cookies.hpp"
 
 Cookies::Cookies(): _connections(0) 
 {}

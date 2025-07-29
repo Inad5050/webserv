@@ -1,4 +1,4 @@
-#include "../../include/server/ClientBuffer.hpp"
+#include "server/ClientBuffer.hpp"
 
 ClientBuffer::ClientBuffer(): nmb_read(0), client_fd(-1), chunked(false), \
 chunkedEnd(false), contentLength(0), headerEnd(-1), finishedReading(false)

@@ -1,4 +1,4 @@
-#include "../../include/core/Response.hpp"
+#include "core/Response.hpp"
 #include <sstream>
 
 Response::Response() : _statusCode(200), _statusText("OK") 

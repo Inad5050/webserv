@@ -1,13 +1,13 @@
 #pragma once
 
-#include "../include/libraries.hpp"
-#include "../include/config/ConfigParser.hpp"
-#include "../include/router/Router.hpp"
-#include "../include/core/Request.hpp"
-#include "../include/server/ClientBuffer.hpp"
-#include "../include/core/Response.hpp"
-#include "../include/factory/StaticHandlerFactory.hpp"
-#include "../include/server/Cookies.hpp"
+#include "libraries.hpp"
+#include "config/ConfigParser.hpp"
+#include "router/Router.hpp"
+#include "core/Request.hpp"
+#include "server/ClientBuffer.hpp"
+#include "core/Response.hpp"
+#include "factory/StaticHandlerFactory.hpp"
+#include "server/Cookies.hpp"
 
 extern volatile sig_atomic_t g_signal_received;
 
