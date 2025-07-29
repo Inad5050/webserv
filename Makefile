@@ -2,7 +2,7 @@ NAME				:= webserv
 CXX					:= c++
 
 CXXFLAGS_release	:= -Wall -Wextra -Werror -std=c++98
-CXXFLAGS_debug		:=  $(CXXFLAGS_release) -DNDEBUG
+CXXFLAGS_debug		:=  $(CXXFLAGS_release) -DDEBUG
 
 SRC_DIR				:= src
 OBJ_DIR				:= obj

@@ -19,7 +19,7 @@ class DebugSink
 	}
 };
 
-#ifdef NDEBUG
+#ifdef DEBUG
 	#define debug std::cout
 #else
 	#define debug DebugSink()
