@@ -4,7 +4,8 @@
 #include "libraries.hpp"
 #include "core/Request.hpp"
 
-class ErrorPageHandler {
+class ErrorPageHandler 
+{
     private:
         std::string _rootPath;
         struct ErrorPageEntry 

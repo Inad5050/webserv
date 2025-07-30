@@ -13,7 +13,7 @@ class DebugSink
 		return *this;
 	}
 
-	DebugSink& operator<<(std::ostream& (*)(std::ostream&)) 
+	DebugSink& operator<<(std::ostream& (*)(std::ostream&)) //para tragarse los manipuladores de flujo, como std::endl
 	{
 		return *this;
 	}
