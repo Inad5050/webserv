@@ -31,7 +31,7 @@ The server is capable of:
     ```
 ---
 
-<img src="Screenshot_webserv2.png" width="250"/>
+<img src="Screenshot_webserv2.png" width="750"/>
 
 ## Resources
 
