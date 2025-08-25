@@ -31,7 +31,7 @@ The server is capable of:
     ```
 ---
 
-![webserv](Screenshot_webserv.png)
+![webserv](Screenshot_webserv2.png)
 
 ## Resources
 
