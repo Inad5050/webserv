@@ -1,102 +1,133 @@
-<h1 align="center">School 42 cub3D</h1>
+<h1 align="center">Webserv - Proyecto 42</h1>
 
-This repository contains my implementation of the cub3D project from the 42 cursus. The goal is to create a 3D maze from a first-person perspective using the Ray-casting technique, inspired by the iconic game Wolfenstein 3D.
+Colaborador: ![David Felipe Munilla](https://github.com/PIPEFD)
 
-<h2 align="center">
-    <a href="#about">About</a>
-    <span> · </span>
-    <a href="#structure">Structure</a>
-    <span> · </span>
-<a href="#bonus-features">Bonus Features</a>
-    <span> · </span>
-    <a href="#requirements">Requirements</a>
-    <span> · </span>
-    <a href="#instructions">Instructions</a>
-</h2>
-About
+Este proyecto consiste en implementar un servidor HTTP desde cero en C++, sin el uso de bibliotecas externas como Boost. El objetivo es comprender y construir la arquitectura fundamental de un servidor web como Nginx o Apache, respetando los estándares HTTP/1.1 y los requerimientos del subject.
 
-cub3D is a graphical project that dives into the fundamentals of 3D representation using a 2D map. The objective is to parse a scene description file (.cub) and render a dynamic 3D view of a maze. The player can navigate this maze, experiencing a pseudo-3D world built with the MLX42 graphics library.
+## ✅ Requisitos
 
-The core of the project is to implement a ray-casting engine from scratch to create the illusion of depth and perspective.
+    Configuración: Soporte para archivos de configuración tipo Nginx (.conf).
 
-You can find more details in the official project subject.
-Structure
+    Múltiples Puertos: Capacidad para escuchar en varios puertos e IPs simultáneamente.
 
-The project is built upon three main pillars: Parsing, Ray-casting, and Player Interaction.
-1. Map Parsing and Validation
+    Concurrencia: Manejo de múltiples clientes a la vez mediante epoll (o kqueue).
 
-    The program takes a .cub file as an argument, which contains all the necessary information about the scene.
+    Métodos HTTP: Soporte para GET, POST y DELETE.
 
-    Scene Elements: The parser reads and validates textures for the North, South, East, and West walls, as well as the RGB color codes for the floor and ceiling.
+    Autoindex: Habilitado si no se encuentra un archivo index en un directorio.
 
-    Map Validation: The map itself is thoroughly checked to ensure it is valid. This includes verifying that it is completely enclosed by walls ('1') to prevent the player from escaping the defined area.
+    Redirecciones: Manejo de redirecciones 301 y 302.
 
-2. Ray-casting Engine
+    Códigos de Estado: Gestión correcta de códigos de estado HTTP (200, 404, 500, etc.).
 
-    The 3D effect is achieved by casting rays from the player's position across their field of view (FOV).
+    Páginas de Error: Soporte para páginas de error personalizadas.
 
-    For each vertical stripe of the screen, a ray is cast. The engine calculates the distance from the player to the first wall it hits.
+    CGI: Ejecución de scripts CGI (PHP, Python, etc.) para generar contenido dinámico.
 
-    Based on this distance, the height of the wall stripe to be drawn on the screen is determined: closer walls appear taller, and farther walls appear shorter. This creates the illusion of perspective.
+    Uploads: Gestión de subida de archivos a través de POST.
 
-    The engine also determines which texture to apply based on whether the ray hit a wall facing North, South, East, or West.
+    Gestión de Memoria: Liberación completa de recursos y sin fugas de memoria.
 
-3. Player Controls and Rendering
+## 🧱 Arquitectura
 
-    The game is rendered in real-time using the MLX42 library.
+La arquitectura elegida es un modelo Event-Driven (Dirigido por Eventos), utilizando epoll para el manejo eficiente de I/O asíncrono. Este enfoque es altamente escalable y es el núcleo de servidores de alto rendimiento como Nginx.
 
-    Movement: The player can move forward and backward (W, S) and strafe left and right (A, D).
+flowchart TD
+    A[Web Server] --> B[Parser .conf]
+    B --> C{Server Sockets}
+    C --> D[Event Loop (epoll)]
+    D --> E{Request Handler}
+    E --> F[Request Parsing]
+    F --> G{Router}
+    G --> H[Static File Handler]
+    G --> I[CGI Handler]
+    G --> J[Upload Handler]
+    subgraph Response Generation
+        H --> K[Response Builder]
+        I --> K
+        J --> K
+    end
+    K --> D
 
-    Rotation: The player can look left and right using the arrow keys.
+Flujo de una Petición:
 
-    The game window can be closed cleanly by pressing the ESC key or clicking the window's close button.
+    Inicio del Servidor: El programa primero parsea el archivo de configuración (.conf) para establecer los puertos, rutas y otras directivas.
 
-Bonus Features
+    Creación de Sockets: Se crean los sockets de escucha para cada server block definido y se añaden al monitor de epoll.
 
-This version of cub3D includes several bonus features that enhance the gameplay and technical complexity:
+    Loop de Eventos: El servidor entra en un bucle infinito esperando eventos de I/O con epoll_wait().
 
-    Wall Collisions: The player cannot walk through walls.
+    Gestión de Conexión:
 
-    Minimap: A 2D minimap is displayed on the screen, showing the player's position and the layout of the maze.
+        Si un socket de escucha recibe una conexión, se acepta y el nuevo socket del cliente se añade a epoll.
 
-    Doors: The map can include doors ('D') that can be opened and closed by the player.
+        Si un socket de cliente tiene datos para leer, el Request Handler lee la petición HTTP.
 
-    Mouse Control: The player can rotate their point of view by moving the mouse left and right.
+    Procesamiento:
 
-Note: The animated sprites bonus has not been implemented in this version.
-Requirements
+        La petición es parseada para extraer el método, la URI, las cabeceras y el cuerpo.
 
-To compile and run this project, you will need:
+        El Router determina qué handler debe gestionar la petición basándose en la ruta y la configuración.
 
-    A C compiler, such as gcc.
+        El handler correspondiente (estático, CGI, upload) procesa la petición.
 
-    The make utility.
+    Generación de Respuesta: El handler construye una respuesta HTTP, que se escribe de vuelta en el socket del cliente.
 
-    The MLX42 library (included in the repository) and its dependencies (-ldl -lglfw -pthread -lm).
+    Cierre: La conexión se cierra o se mantiene viva (keep-alive) según lo especificado en las cabeceras.
 
-Instructions
-1. Compile the Project
+## 🌲 Estructura del Proyecto
 
-To compile the mandatory cub3D program:
+webserv/
+│
+├── Makefile
+├── README.md
+│
+├── config/
+│   └── default.conf
+│
+├── data/
+│   ├── uploads/
+│   └── cgi-bin/
+│       └── script.php
+│
+├── www/
+│   ├── index.html
+│   └── error_pages/
+│       └── 404.html
+│
+├── include/
+│   ├── Server.hpp
+│   ├── Request.hpp
+│   ├── Response.hpp
+│   ├── ConfigParser.hpp
+│   └── CgiHandler.hpp
+│
+└── src/
+    ├── main.cpp
+    ├── Server.cpp
+    ├── Request.cpp
+    ├── Response.cpp
+    ├── ConfigParser.cpp
+    └── CgiHandler.cpp
+
+## 🚀 Uso
+
+Para compilar y ejecutar el servidor, usa make. Por defecto, se configurará según config/default.conf.
+
 $ make
+$ ./webserv
 
-To compile the cub3D_bonus program:
-$ make bonus
+## Navegador
 
-The Makefile will automatically build the included libft and MLX42 libraries.
-2. Clean Files
+Para conectarte al servidor desde un navegador, usa la dirección y el puerto especificados en tu archivo de configuración. Por ejemplo:
+`http://localhost:8080`
 
-To remove the object files (.o):
-$ make clean
+## 📚 Documentación Oficial Relevante
 
-To remove object files and the executables:
-$ make fclean
+* HTTP/1.1: RFC 7230-7235
 
-To clean and recompile everything:
-$ make re
-3. How to Run
+* CGI: RFC 3875
 
-Run the game with a map file as an argument. Several valid maps are included in the maps/ and maps_bonus/ directories.
+* Sockets API: man socket, man bind, man listen, man accept
 
-Example:
-$ ./cub3D_bonus maps_bonus/valid/valid_map.cub
+* I/O Multiplexing: man epoll
