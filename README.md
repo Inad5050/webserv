@@ -2,6 +2,8 @@
 
 Colaborador: ![David Felipe Munilla](https://github.com/PIPEFD)
 
+[Subject](webserv_subject.pdf)
+
 ## About The Project
 
 This project involves creating an HTTP web server from scratch, compatible with C++98. The goal is to implement the essential components of the HTTP/1.1 protocol to handle requests from clients, such as a web browser, concurrently and in a non-blocking manner.
@@ -27,11 +29,7 @@ The server is capable of:
     ```bash
     ./webserv [path/to/your_config_file.conf]
     ```
-    If no configuration file is provided, the server will use a default one.
-
 ---
-
-[Subject](webserv_subject.pdf)
 
 ## Resources
 
