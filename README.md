@@ -33,20 +33,35 @@ Este proyecto consiste en implementar un servidor HTTP desde cero en C++, sin el
 La arquitectura elegida es un modelo Event-Driven (Dirigido por Eventos), utilizando epoll para el manejo eficiente de I/O asíncrono. Este enfoque es altamente escalable y es el núcleo de servidores de alto rendimiento como Nginx.
 
 flowchart TD
+
     A[Web Server] --> B[Parser .conf]
+    
     B --> C{Server Sockets}
+    
     C --> D[Event Loop (epoll)]
+    
     D --> E{Request Handler}
+    
     E --> F[Request Parsing]
+    
     F --> G{Router}
+    
     G --> H[Static File Handler]
+    
     G --> I[CGI Handler]
+    
     G --> J[Upload Handler]
+    
     subgraph Response Generation
+    
         H --> K[Response Builder]
+        
         I --> K
+        
         J --> K
+        
     end
+    
     K --> D
 
 Flujo de una Petición:
