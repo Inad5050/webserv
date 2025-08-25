@@ -1,272 +1,102 @@
+<h1 align="center">School 42 cub3D</h1>
 
-<<<<<<<<< Temporary merge branch 1
-=========
-# WEBSERV
+This repository contains my implementation of the cub3D project from the 42 cursus. The goal is to create a 3D maze from a first-person perspective using the Ray-casting technique, inspired by the iconic game Wolfenstein 3D.
 
-### SERVER
-- Para usar el servidor usa make y ejecuta ./webserv. Por defecto usara el puerto 8080 y cualquier dirección IP.
-- Para desplegar el cliente abre otro terminal y usa 'make client'. Se conectará al servidor. 
+<h2 align="center">
+    <a href="#about">About</a>
+    <span> · </span>
+    <a href="#structure">Structure</a>
+    <span> · </span>
+<a href="#bonus-features">Bonus Features</a>
+    <span> · </span>
+    <a href="#requirements">Requirements</a>
+    <span> · </span>
+    <a href="#instructions">Instructions</a>
+</h2>
+About
 
-### NAVEGADOR
-- Para conectarte al servidor desde el navegador usa: http//localhost:8080
+cub3D is a graphical project that dives into the fundamentals of 3D representation using a 2D map. The objective is to parse a scene description file (.cub) and render a dynamic 3D view of a maze. The player can navigate this maze, experiencing a pseudo-3D world built with the MLX42 graphics library.
 
-### TEORIA
-- La teoria del funcionamiento del server esta en src/Server.cpp
+The core of the project is to implement a ray-casting engine from scratch to create the illusion of depth and perspective.
 
+You can find more details in the official project subject.
+Structure
 
->>>>>>>>> Temporary merge branch 2
-# Webserv - Proyecto 42
+The project is built upon three main pillars: Parsing, Ray-casting, and Player Interaction.
+1. Map Parsing and Validation
 
-Este proyecto consiste en implementar un servidor HTTP desde cero en C++, sin el uso de bibliotecas externas como Boost. El objetivo es comprender y construir la arquitectura fundamental de un servidor web como Nginx o Apache, respetando los estándares HTTP/1.1 y los requerimientos del subject.
+    The program takes a .cub file as an argument, which contains all the necessary information about the scene.
 
----
+    Scene Elements: The parser reads and validates textures for the North, South, East, and West walls, as well as the RGB color codes for the floor and ceiling.
 
-## ✅ Requisitos obligatorios
+    Map Validation: The map itself is thoroughly checked to ensure it is valid. This includes verifying that it is completely enclosed by walls ('1') to prevent the player from escaping the defined area.
 
-- 🧾 Soporte para archivos de configuración tipo nginx (`.conf`)
-- 🌐 Servidor capaz de escuchar en múltiples puertos/IPs
-- 👥 Manejo simultáneo de al menos 3 clientes
-- 📩 Métodos HTTP soportados: `GET`, `POST` y `DELETE`
-- 🗂 Autoindex habilitado si no hay archivo index
-- 🔁 Redirecciones 301 y 302
-- 🧠 Manejo de códigos de estado HTTP correctos (200, 404, 500...)
-- 🧨 Páginas de error personalizadas
-- ⚙️ Soporte de CGI (por ejemplo: ejecutar scripts PHP o Python)
-- 💾 Gestión de uploads via POST (por ejemplo: `multipart/form-data`)
-- 🧼 Liberación completa de recursos y sin memory leaks (`valgrind`)
+2. Ray-casting Engine
 
----
+    The 3D effect is achieved by casting rays from the player's position across their field of view (FOV).
 
-## 🧱 Arquitectura general
+    For each vertical stripe of the screen, a ray is cast. The engine calculates the distance from the player to the first wall it hits.
 
-#### 📐 Arquitectura Elegida: Event-Driven + Middleware + Router Modular
+    Based on this distance, the height of the wall stripe to be drawn on the screen is determined: closer walls appear taller, and farther walls appear shorter. This creates the illusion of perspective.
 
-#### 📊 Ventajas:
-- 🔁 Escalable (ideal para múltiples conexiones simultáneas)
-- 🧱 Modular (fácil añadir PUT, HEAD, 301, cookies, etc.)
-- 📦 Extensible (compatible con WebSocket y CGI)
-- 🧵 Adaptable a multithread o single-thread eficiente
+    The engine also determines which texture to apply based on whether the ray hit a wall facing North, South, East, or West.
 
+3. Player Controls and Rendering
 
-```mermaid
-flowchart TD
-    A[Web Server (C++)]
-    A --> B[Parser]
-    B -->|Carga config| C[Server]
-    C --> D[Request Handler]
-    D --> E[Request Parsing]
-    D --> F[Action Execution]
-    D --> G[Response Builder]
-    F --> H[CGI Manager]
-```
+    The game is rendered in real-time using the MLX42 library.
 
-## 🧠 Explicación paso a paso
+    Movement: The player can move forward and backward (W, S) and strafe left and right (A, D).
 
-### A[Web Server (C++)]
-Nodo principal: es el servidor web escrito en C++, que contiene todos los componentes del sistema.
+    Rotation: The player can look left and right using the arrow keys.
 
-### A --> B[Parser]
-El servidor primero llama al **Parser**, que se encarga de **leer y analizar el archivo de configuración `.conf`**, como en Nginx.
+    The game window can be closed cleanly by pressing the ESC key or clicking the window's close button.
 
-### B -->|Carga config| C[Server]
-Una vez procesada la configuración, se pasa al módulo **Server**, que es el encargado de **abrir sockets, escuchar en puertos/IPs definidos y aceptar conexiones**.
+Bonus Features
 
-### C --> D[Request Handler]
-Por cada conexión que llega, el servidor invoca el **Request Handler**, quien se encarga de **procesar cada petición HTTP**.
+This version of cub3D includes several bonus features that enhance the gameplay and technical complexity:
 
-### D --> E[Request Parsing]
-El handler primero **interpreta la solicitud**: método (`GET`, `POST`...), URI, headers, body, etc.
+    Wall Collisions: The player cannot walk through walls.
 
-### D --> F[Action Execution]
-Luego **ejecuta la acción correspondiente**: buscar archivo, ejecutar CGI, borrar un recurso, etc.
+    Minimap: A 2D minimap is displayed on the screen, showing the player's position and the layout of the maze.
 
-### D --> G[Response Builder]
-Después, **genera la respuesta HTTP** adecuada con su código (`200`, `404`...), headers y cuerpo.
+    Doors: The map can include doors ('D') that can be opened and closed by the player.
 
-### F --> H[CGI Manager]
-Si la acción incluye ejecutar un script (por ejemplo PHP), se delega a **CGI Manager**, que se encarga de **correr el script externo** y devolver su salida como respuesta.
+    Mouse Control: The player can rotate their point of view by moving the mouse left and right.
 
----
+Note: The animated sprites bonus has not been implemented in this version.
+Requirements
 
-### 🔄 Flujo resumido
+To compile and run this project, you will need:
 
-CONFIGURACIÓN → SERVIDOR → PETICIÓN → PARSEO → ACCIÓN (CGI o no) → RESPUESTA
+    A C compiler, such as gcc.
 
----
+    The make utility.
 
+    The MLX42 library (included in the repository) and its dependencies (-ldl -lglfw -pthread -lm).
 
-### 🗂 Componentes Principales:
-### epoll()
-```
-[ epoll() ]
-    |
-    v
-[ fd activo ] --> [ Connection Handler ]
-                      |
-                      v
-              [ Parser HTTP ]
-                      |
-                      v
-              [ Middleware Stack ]
-                  |       |
-          [Session]   [Cookie]
-                  |
-                  v
-               [ Router ]
-             /     |     \
-         CGI   Static   WebSocket
-             \     |     /
-              [ Response ]
-                  |
-               [ write() ]
-```
----
+Instructions
+1. Compile the Project
 
-## 🌲 Árbol del Proyecto
+To compile the mandatory cub3D program:
+$ make
 
-```
-webserv/
-│
-├── Makefile                           # Compilación principal
-├── README.md                          # Documentación general del proyecto
-├── LICENSE                            # (opcional) Licencia del proyecto
-│
-├── config/
-│   └── server.conf                    # Configuración tipo NGINX
-│
-├── data/                              # Recursos dinámicos
-│   ├── uploads/                       # Archivos subidos por usuarios
-│   └── cgi-bin/                       # Scripts CGI (PHP, Python, etc.)
-│
-├── www/                               # Archivos estáticos del sitio web
-│   └── index.html                     # Página por defecto
-│
-├── include/                           # Headers del proyecto
-│   ├── core/
-│   │   ├── Server.hpp
-│   │   ├── Poller.hpp
-│   │   ├── Connection.hpp
-│   │   └── EventLoop.hpp
-│   ├── http/
-│   │   ├── HttpRequest.hpp
-│   │   ├── HttpResponse.hpp
-│   │   └── HttpParser.hpp
-│   ├── middleware/
-│   │   ├── CookieMiddleware.hpp
-│   │   ├── SessionMiddleware.hpp
-│   │   └── LoggerMiddleware.hpp
-│   ├── router/
-│   │   ├── Route.hpp
-│   │   └── Router.hpp
-│   ├── handlers/
-│   │   ├── StaticHandler.hpp
-│   │   ├── CgiHandler.hpp
-│   │   ├── WebSocketHandler.hpp
-│   │   └── UploadHandler.hpp
-│   ├── utils/
-│   │   ├── Logger.hpp
-│   │   ├── MimeTypes.hpp
-│   │   └── StatusCodes.hpp
-│   └── ConfigParser.hpp               # Parser del archivo de configuración
-│
-├── src/
-│   ├── main.cpp                       # Punto de entrada
-│   ├── core/
-│   │   ├── Server.cpp
-│   │   ├── Poller.cpp
-│   │   ├── Connection.cpp
-│   │   └── EventLoop.cpp
-│   ├── http/
-│   │   ├── HttpRequest.cpp
-│   │   ├── HttpResponse.cpp
-│   │   └── HttpParser.cpp
-│   ├── middleware/
-│   │   ├── CookieMiddleware.cpp
-│   │   ├── SessionMiddleware.cpp
-│   │   └── LoggerMiddleware.cpp
-│   ├── router/
-│   │   ├── Route.cpp
-│   │   └── Router.cpp
-│   ├── handlers/
-│   │   ├── StaticHandler.cpp
-│   │   ├── CgiHandler.cpp
-│   │   ├── WebSocketHandler.cpp
-│   │   └── UploadHandler.cpp
-│   ├── utils/
-│   │   ├── Logger.cpp
-│   │   ├── MimeTypes.cpp
-│   │   └── StatusCodes.cpp
-│   └── ConfigParser.cpp
-│
-├── tests/
-│   ├── test_config/
-│   ├── test_http/
-│   ├── test_parser/
-│   └── test_router/
-│
-└── docs/
-    ├── architecture.md                # Explicación de diseño
-    ├── api.md                         # Especificaciones internas
-    ├── bonus_checklist.md             # Progreso de bonus
-    └── rfc/                           # RFCs de referencia (copias locales opcionales)
+To compile the cub3D_bonus program:
+$ make bonus
 
-```
+The Makefile will automatically build the included libft and MLX42 libraries.
+2. Clean Files
 
+To remove the object files (.o):
+$ make clean
 
-# 🌐 Documentación Oficial Relevante para el Proyecto Webserv 📘
+To remove object files and the executables:
+$ make fclean
 
-## 1. Protocolo HTTP
-- **HTTP/1.1 (RFC 2616 - Obsoleto)**  
-  https://www.w3.org/Protocols/rfc2616/rfc2616.html
+To clean and recompile everything:
+$ make re
+3. How to Run
 
-- **HTTP/1.1 actualizado (RFC 7230 a RFC 7235)**  
-  - [RFC 7230 - Message Syntax and Routing](https://datatracker.ietf.org/doc/html/rfc7230)  
-  - [RFC 7231 - Semantics and Content](https://datatracker.ietf.org/doc/html/rfc7231)  
-  - [RFC 7235 - Authentication](https://datatracker.ietf.org/doc/html/rfc7235)
+Run the game with a map file as an argument. Several valid maps are included in the maps/ and maps_bonus/ directories.
 
-## 2. Sockets y Redes en UNIX (POSIX)
-- Manual POSIX de `socket`, `bind`, `accept`, `listen`, `poll`, etc.  
-  - https://man7.org/linux/man-pages/dir_section_2.html  
-  - https://man7.org/linux/man-pages/man2/socket.2.html  
-  - https://man7.org/linux/man-pages/man2/poll.2.html
-
-## 3. Estándar C++98
-- **ISO/IEC 14882:1998 — Lenguaje de programación C++**  
-  - [Consulta PDF proporcionado (tu archivo iso-cpp.pdf)]  
-  - Alternativamente: https://cplusplus.com/doc/tutorial/
-
-## 4. Documentación CGI
-- **Especificación CGI 1.1 (RFC 3875)**  
-  https://datatracker.ietf.org/doc/html/rfc3875  
-- **Referencia de variables de entorno CGI**  
-  https://www.cgi101.com/book/ch3/text.html
-
-## 5. NGINX
-- Documentación oficial:  
-  - https://nginx.org/en/docs/  
-  - https://nginx.org/en/docs/http/configuring_https_servers.html  
-  - https://nginx.org/en/docs/http/ngx_http_proxy_module.html
-
-## 6. Certificados SSL para desarrollo
-- **OpenSSL CLI (para generar certificados autofirmados)**  
-  - https://www.openssl.org/docs/man1.1.1/man1/openssl.html  
-  - https://wiki.openssl.org/index.php/Command_Line_Utilities
-
-## 7. Referencia HTTP de Mozilla Developer Network (MDN)
-- https://developer.mozilla.org/en-US/docs/Web/HTTP  
-  Ideal para entender los códigos de estado, headers, y flujos de conexión HTTP.
-
----
-
-# 🧠 Análisis de Arquitecturas Posibles para Webserv
-
-| Arquitectura                      | Descripción breve                                                                 | Ventajas                                                                 | Inconvenientes                                                                 | ¿Viable para Webserv + bonus?      |
-|----------------------------------|------------------------------------------------------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------------------------------------|-------------------------------------|
-| Monolítica                       | Toda la lógica en un solo binario o módulo                                        | Fácil de desarrollar al principio                                        | Difícil de mantener con múltiples funcionalidades                              | ❌ No recomendado                   |
-| Microservicios                   | Cada componente es un servicio independiente                                      | Escalable, robusto, ideal para grandes sistemas                          | Muy complejo, necesitas red interna, contenedores, etc.                       | ❌ Excesivo para Webserv            |
-| MVC (Model View Controller)      | Separación entre lógica (Controlador), datos (Modelo) y presentación (Vista)     | Facilita añadir rutas, lógica, vistas, respuestas estructuradas         | No es nativa para servidores HTTP desde 0                                     | ⚠️ Interesante para capas internas  |
-| Reactor Pattern (💡)             | Un loop de eventos que distribuye eventos I/O a manejadores (handlers) sin bloqueo| Ideal para poll()/select, escalable, usado en NGINX y Node.js            | Requiere diseño claro de conexiones y estados                                 | ✅ Sí. Ideal como núcleo de Webserv |
-| Multithread con Pool de Workers  | Un hilo principal acepta conexiones y distribuye a un pool de threads            | Muy eficiente para CPU-bound o CGI                                       | Complejidad de sincronización                                                | ✅ Sí, si quieres bonus multithread |
-| Pipeline/Middleware              | Las solicitudes pasan por etapas (parser, router, lógica, respuesta) en cadena    | Altamente extensible, ideal para agregar funcionalidades como sesiones   | Necesita diseño modular, pero factible                                        | ✅ Altamente recomendado            |
-| Event-Driven + Middleware híbrido| Combinación del patrón Reactor + Pipeline interno                                 | Máxima flexibilidad y escalabilidad                                     | Requiere pensar en fases y estado por conexión                               | ✅ Arquitectura recomendada         |
-
+Example:
+$ ./cub3D_bonus maps_bonus/valid/valid_map.cub
