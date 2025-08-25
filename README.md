@@ -31,6 +31,8 @@ The server is capable of:
     ```
 ---
 
+![webserv](Screenshot_webserv.png)
+
 ## Resources
 
 ### Server setup
