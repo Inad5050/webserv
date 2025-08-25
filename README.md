@@ -93,36 +93,67 @@ Flujo de una Petición:
 ## 🌲 Estructura del Proyecto
 
 webserv/
+
 │
+
 ├── Makefile
+
 ├── README.md
+
 │
+
 ├── config/
+
 │   └── default.conf
+
 │
+
 ├── data/
+
 │   ├── uploads/
+
 │   └── cgi-bin/
+
 │       └── script.php
+
 │
+
 ├── www/
+
 │   ├── index.html
+
 │   └── error_pages/
+
 │       └── 404.html
+
 │
+
 ├── include/
+
 │   ├── Server.hpp
+
 │   ├── Request.hpp
+
 │   ├── Response.hpp
+
 │   ├── ConfigParser.hpp
+
 │   └── CgiHandler.hpp
+
 │
+
 └── src/
+
     ├── main.cpp
+    
     ├── Server.cpp
+    
     ├── Request.cpp
+    
     ├── Response.cpp
+    
     ├── ConfigParser.cpp
+    
     └── CgiHandler.cpp
 
 ## 🚀 Uso
